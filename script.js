@@ -1,5 +1,6 @@
 import { secretWordsMock } from './mocks/secret-words-mock.js';
 
+
 // Initialize modal using Bootstrap
 const myModal = new bootstrap.Modal(document.getElementById("staticBackdrop"), {});
 
@@ -41,11 +42,61 @@ function disableButton(buttonId) {
   document.getElementById(buttonId).classList.add("disabled");
 }
 
+
+
+/**
+ * Generates a virtual keyboard with buttons for letters A-Z in HTML.
+ */
+function generateKeyboard() {
+  const keyboardContainer = document.querySelector(".keyboard-container");
+
+  for (let charCode = 65; charCode < 91; charCode++) {
+    const letter = String.fromCharCode(charCode);
+    const buttonHTML = `<button id="${letter}" onclick="findLetter('${letter}')" type="button" class="btn btn-primary">${letter}</button>`;
+
+    keyboardContainer.innerHTML += buttonHTML;
+  }
+}
+
+document.addEventListener('keydown', function(event) {
+  const pressedKey = event.key.toUpperCase();
+  const buttonElement = document.getElementById(pressedKey);
+
+  // Check if the button is disabled
+  if (buttonElement?.classList.contains("disabled")) {
+    return;
+  }
+
+  // Check if the pressed key is a valid letter (A-Z)
+  const alphabetRegex = /^[A-Z]$/;
+  if (alphabetRegex.test(pressedKey)) {
+    // Call the findLetter function with the pressed key
+    findLetter(pressedKey);
+    // Focus on the corresponding button
+    buttonElement.focus();
+  }
+});
+
+/**
+ * Configures HTML to display whitespace for each letter of the secret word.
+ */
+function setSecretWordBlankLetters() {
+  const secretWordListElement = document.querySelector(".secret-word-ul");
+
+  for (const index in wordSplitted) {
+    secretWordListElement.innerHTML += `<li id='secret-word-${index}'>&#8203;</li>`;
+  }
+}
+
+
+
+
+
 /**
  * Find a letter in the character array of random word.
  * @param {string} letter 
  */
-function findLetter(letter) {
+export function findLetter(letter) {
   // Check if the game is over before proceeding
   if (gameOver) return;
 
@@ -102,49 +153,7 @@ function findLetter(letter) {
   // console.log(revealedLetters);
 }
 
-/**
- * Generates a virtual keyboard with buttons for letters A-Z in HTML.
- */
-function generateKeyboard() {
-  const keyboardContainer = document.querySelector(".keyboard-container");
 
-  for (let charCode = 65; charCode < 91; charCode++) {
-    const letter = String.fromCharCode(charCode);
-    const buttonHTML = `<button id="${letter}" onclick="findLetter('${letter}')" type="button" class="btn btn-primary">${letter}</button>`;
-
-    keyboardContainer.innerHTML += buttonHTML;
-  }
-}
-
-document.addEventListener('keydown', function(event) {
-  const pressedKey = event.key.toUpperCase();
-  const buttonElement = document.getElementById(pressedKey);
-
-  // Check if the button is disabled
-  if (buttonElement?.classList.contains("disabled")) {
-    return;
-  }
-
-  // Check if the pressed key is a valid letter (A-Z)
-  const alphabetRegex = /^[A-Z]$/;
-  if (alphabetRegex.test(pressedKey)) {
-    // Call the findLetter function with the pressed key
-    findLetter(pressedKey);
-    // Focus on the corresponding button
-    buttonElement.focus();
-  }
-});
-
-/**
- * Configures HTML to display whitespace for each letter of the secret word.
- */
-function setSecretWordBlankLetters() {
-  const secretWordListElement = document.querySelector(".secret-word-ul");
-
-  for (const index in wordSplitted) {
-    secretWordListElement.innerHTML += `<li id='secret-word-${index}'>&#8203;</li>`;
-  }
-}
 
 function startGame(){
   // Get a random word from the mock data

@@ -5,7 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da forca</title>
 </head>
-<body>
+<body class="bg-secondary">
+    <main id="main" class="bg-light">
+      <section class="hangman-section">
+        <img id="hangman-img" src="./images/hangman-0.svg" width="100%">
+      </section>
+  
+      <aside>
+        <ul class="secret-word-ul"></ul>
+  
+        <div class="hint-container">
+          <p>Dica: <strong id="hint-text"></strong></p>
+          <p>Tentativas incorrentas: <strong><span id="guesses-text" class="text-danger">0/6</span></strong></p>
+        </div>
+  
+        <div class="keyboard-container"></div>
+      </aside>
+
+
+    </main>
+
     <script type="module" src="./script.js"></script>
 </body>
 </html>
